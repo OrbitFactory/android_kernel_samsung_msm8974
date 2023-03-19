@@ -239,12 +239,12 @@ endif
 	dtb-$(CONFIG_SEC_V2_PROJECT)	+= msm8974-sec-v2lte-r02.dtb
 ifeq ($(CONFIG_SEC_F_PROJECT),y)
 # flte kor device tree
-	dtb-y	+= msm8974-sec-fltekor-r05.dtb
-	dtb-y	+= msm8974-sec-fltekor-r06.dtb
-	dtb-y	+= msm8974-sec-fltekor-r07.dtb
-	dtb-y	+= msm8974-sec-fltekor-r09.dtb
-	dtb-y	+= msm8974-sec-fltekor-r10.dtb
-	dtb-y	+= msm8974-sec-fltekor-r11.dtb
+#	dtb-y	+= msm8974-sec-fltekor-r05.dtb
+#	dtb-y	+= msm8974-sec-fltekor-r06.dtb
+#	dtb-y	+= msm8974-sec-fltekor-r07.dtb
+#	dtb-y	+= msm8974-sec-fltekor-r09.dtb
+#	dtb-y	+= msm8974-sec-fltekor-r10.dtb
+#	dtb-y	+= msm8974-sec-fltekor-r11.dtb
 	dtb-y	+= msm8974-sec-fltekor-r12.dtb
 	dtb-y	+= msm8974-sec-fltekor-r13.dtb
 	dtb-y	+= msm8974-sec-fltekor-r14.dtb
