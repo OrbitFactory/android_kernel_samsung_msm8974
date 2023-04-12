@@ -243,12 +243,6 @@ ifeq ($(CONFIG_SEC_F_PROJECT),y)
 	dtb-y	+= msm8974-sec-fltekor-r06.dtb
 	dtb-y	+= msm8974-sec-fltekor-r07.dtb
 	dtb-y	+= msm8974-sec-fltekor-r09.dtb
-	dtb-y	+= msm8974-sec-fltekor-r10.dtb
-	dtb-y	+= msm8974-sec-fltekor-r11.dtb
-	dtb-y	+= msm8974-sec-fltekor-r12.dtb
-	dtb-y	+= msm8974-sec-fltekor-r13.dtb
-	dtb-y	+= msm8974-sec-fltekor-r14.dtb
-	dtb-y	+= msm8974-sec-fltekor-r16.dtb
 endif
 ifeq ($(CONFIG_SEC_KS01_PROJECT),y)
 ifeq ($(CONFIG_SEC_LOCALE_KOR),y)
