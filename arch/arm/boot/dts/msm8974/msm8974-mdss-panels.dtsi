@@ -19,3 +19,4 @@
 /include/ "dsi_panel_jdi_tft_fhd_video.dtsi"
 /include/ "dsi_panel_samsung_octa_2560p_cmd_S6TNMR7.dtsi"
 /include/ "dsi_panel_samsung_octa_2560p_cmd_S6E3HA1.dtsi"
+/include/ "dsi_panel_samsung_youm_1080p_cmd_s6e3fa1.dtsi"
