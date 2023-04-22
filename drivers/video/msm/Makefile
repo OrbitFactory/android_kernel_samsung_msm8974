@@ -1,5 +1,9 @@
 ifeq ($(CONFIG_FB_MSM_MDSS_COMMON),y)
+ifeq ($(CONFIG_FB_MSM_MIPI_SAMSUNG_YOUM_CMD_FULL_HD_PT_PANEL),y)
+obj-y += mdss_flte/
+else
 obj-y += mdss/
+endif
 obj-$(CONFIG_VIDEO_MHL_SII8246) += mhl_v2/
 obj-$(CONFIG_VIDEO_MHL_V2) += mhl_v2/
 else

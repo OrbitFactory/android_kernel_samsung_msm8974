@@ -979,6 +979,10 @@ config FB_MSM_QPIC_PANEL_DETECT
 	---help---
 	  Support for Qpic panel auto detect
 
+if FB_MSM_MIPI_SAMSUNG_YOUM_CMD_FULL_HD_PT_PANEL
+	source "drivers/video/msm/mdss_flte/Kconfig"
+endif
+
 if FB_MSM_MDSS
 	source "drivers/video/msm/mdss/Kconfig"
 endif
