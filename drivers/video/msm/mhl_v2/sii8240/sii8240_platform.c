@@ -14,9 +14,15 @@
 #include <linux/of_gpio.h>
 
 #include "sii8240_platform.h"
+#if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_YOUM_CMD_FULL_HD_PT_PANEL)
+#include "../../mdss_flte/mdss_panel.h"
+#include "../../mdss_flte/mdss_hdmi_tx.h"
+#include "../../mdss_flte/mdss_hdmi_hdcp.h"
+#else
 #include "../../mdss/mdss_panel.h"
 #include "../../mdss/mdss_hdmi_tx.h"
 #include "../../mdss/mdss_hdmi_hdcp.h"
+#endif
 
 #if defined(CONFIG_MFD_MAX77803)
 #define MFD_MAX778XX_COMMON
@@ -143,7 +149,11 @@ int platform_ap_hdmi_hdcp_auth(struct sii8240_data *sii8240)
 		}
 		sii8240->mhl_ddc_bypass(true);
 		hdcp_ctrl_global->hdcp_state = HDCP_STATE_AUTHENTICATING;
-		ret = hdmi_hdcp_authentication_part1_start(hdcp_ctrl_global);
+#if defined(CONFIG_FB_MSM_MIPI_SAMSUNG_YOUM_CMD_FULL_HD_PT_PANEL)
+		ret = hdmi_hdcp_authentication_part1(hdcp_ctrl_global);
+#else
+hdmi_hdcp_authentication_part1_start(hdcp_ctrl_global);
+#endif
 		sii8240->mhl_ddc_bypass(false);
 		if (ret) {
 			pr_err("%s: HDMI HDCP Auth Part I failed\n", __func__);
