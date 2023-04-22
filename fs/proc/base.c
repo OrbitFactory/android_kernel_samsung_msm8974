@@ -378,12 +378,13 @@ static const struct file_operations proc_lstats_operations = {
 
 static int proc_oom_score(struct task_struct *task, char *buffer)
 {
+	unsigned long totalpages = totalram_pages + total_swap_pages;
 	unsigned long points = 0;
 
 	read_lock(&tasklist_lock);
 	if (pid_alive(task))
-		points = oom_badness(task, NULL, NULL,
-					totalram_pages + total_swap_pages);
+		points = oom_badness(task, NULL, NULL, totalpages) *
+						1000 / totalpages;
 	read_unlock(&tasklist_lock);
 	return sprintf(buffer, "%lu\n", points);
 }
@@ -895,15 +896,9 @@ static ssize_t oom_adjust_write(struct file *file, const char __user *buf,
 		goto out;
 	}
 
-	task_lock(task);
-	if (!task->mm) {
-		err = -EINVAL;
-		goto err_task_lock;
-	}
-
 	if (!lock_task_sighand(task, &flags)) {
 		err = -ESRCH;
-		goto err_task_lock;
+		goto err_put_task;
 	}
 
 	if (oom_adjust < task->signal->oom_adj && !capable(CAP_SYS_RESOURCE)) {
@@ -931,8 +926,7 @@ static ssize_t oom_adjust_write(struct file *file, const char __user *buf,
 	trace_oom_score_adj_update(task);
 err_sighand:
 	unlock_task_sighand(task, &flags);
-err_task_lock:
-	task_unlock(task);
+err_put_task:
 	put_task_struct(task);
 out:
 	return err < 0 ? err : count;
@@ -1093,15 +1087,9 @@ static ssize_t oom_score_adj_write(struct file *file, const char __user *buf,
 		goto out;
 	}
 
-	task_lock(task);
-	if (!task->mm) {
-		err = -EINVAL;
-		goto err_task_lock;
-	}
-
 	if (!lock_task_sighand(task, &flags)) {
 		err = -ESRCH;
-		goto err_task_lock;
+		goto err_put_task;
 	}
 
 	if (oom_score_adj < task->signal->oom_score_adj_min &&
@@ -1125,8 +1113,7 @@ static ssize_t oom_score_adj_write(struct file *file, const char __user *buf,
 							OOM_SCORE_ADJ_MAX;
 err_sighand:
 	unlock_task_sighand(task, &flags);
-err_task_lock:
-	task_unlock(task);
+err_put_task:
 	put_task_struct(task);
 out:
 	return err < 0 ? err : count;
@@ -2828,7 +2815,8 @@ static void *proc_self_follow_link(struct dentry *dentry, struct nameidata *nd)
 	pid_t tgid = task_tgid_nr_ns(current, ns);
 	char *name = ERR_PTR(-ENOENT);
 	if (tgid) {
-		name = __getname();
+		/* 11 for max length of signed int in decimal + NULL term */
+		name = kmalloc(12, GFP_KERNEL);
 		if (!name)
 			name = ERR_PTR(-ENOMEM);
 		else
@@ -2843,7 +2831,7 @@ static void proc_self_put_link(struct dentry *dentry, struct nameidata *nd,
 {
 	char *s = nd_get_link(nd);
 	if (!IS_ERR(s))
-		__putname(s);
+		kfree(s);
 }
 
 static const struct inode_operations proc_self_inode_operations = {
